@@ -6,6 +6,8 @@
 #include <queue>
 #include <fstream>
 #include <limits>
+#include <chrono>
+#include <sys/resource.h>
 
 
 using namespace std;
@@ -276,6 +278,12 @@ edgemap algo5(gr_type &graph, unsigned long n_cities, numset &transport, unsigne
      return p;
 }
 
+float get_rss() {
+        struct rusage mem;
+        getrusage(RUSAGE_SELF, &mem);
+        return mem.ru_maxrss;
+    }
+
 void print_track(track &tr, map<unsigned long, string> &ind2tr, map<unsigned long, string> &ind2city)
 {
     cout<<endl;
@@ -303,6 +311,7 @@ void print_track(track &tr, map<unsigned long, string> &ind2tr, map<unsigned lon
 
 int main(int argc, char** argv)
 {
+	cout<<"start prog max rss = "<<get_rss()<<" KB"<<endl;
     const char* input_file=argv[1];
     setlocale(0, "");
     //SetConsoleOutputCP(65001);
@@ -321,7 +330,6 @@ int main(int argc, char** argv)
     for( string line; getline( input, line ); )
     {
         if (!line.length() || line[0]=='#') continue;
-        //cout<<line<<endl;
         string deli = "\"";
         string from_city;
         string to_city;
@@ -387,15 +395,8 @@ int main(int argc, char** argv)
         unsigned long cruise_fare = strtoul(cf.c_str(), nullptr, 10);
         edge ed=edge(id_from, id_to, id_tr, cruise_time, cruise_fare);
         graph[id_from][id_to].push_back(ed);
-        //cout<<from_city<<" "<<id_from<<endl; //Отладочная печать
-        //cout<<to_city<<" "<<id_to<<endl;
-        //cout<<transport_type<<" "<<id_tr<<endl;
-        //cout<<cruise_time<<endl;
-        //cout<<cruise_fare<<endl;
-        //cout<<endl;
     }
-    //SetConsoleCP(1251);
-    //SetConsoleOutputCP(1251);
+	cout<<"after graph uploading max rss = "<<get_rss()<<" KB"<<endl;
     while(1)//Основной цикл программы
     {
         cout<<endl;
@@ -529,6 +530,7 @@ int main(int argc, char** argv)
                 if (flag==1) break;
                 cout<<"Такого города не найдено в базе данных. Введите другой город или введите 0 чтобы выйти из программы"<<endl;
             }
+			auto begin_time = chrono::high_resolution_clock::now();
             //Алгоритм Дейкстры 1 режима
             edgemap res = algo1(graph, count_id1, en_transp, from_id);
             //Проход по пути с его выводом
@@ -540,7 +542,12 @@ int main(int argc, char** argv)
                 cruise=cruise+res[curver];
                 curver=res[curver].from;
             }
+			auto end_time = chrono::high_resolution_clock::now();
+			auto elapsed_mcs = chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
             print_track(cruise, ind2tr, ind2city);
+			cout<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
+			cout<<"max rss = "<<get_rss()<<" KB"<<endl;
+			cout<<endl;
         }
         else if (mode==2)//2 РЕЖИМ
         {
@@ -566,6 +573,7 @@ int main(int argc, char** argv)
                 if (flag==1) break;
                 cout<<"Такого города не найдено в базе данных. Введите другой город или 0 чтобы выйти"<<endl;
             }
+			auto begin_time = chrono::high_resolution_clock::now();
             //Алгоритм Дейкстры 2 режима
             edgemap res = algo2(graph, count_id1, en_transp, from_id);
             //Проход по пути с его выводом
@@ -577,7 +585,12 @@ int main(int argc, char** argv)
                 cruise=cruise+res[curver];
                 curver=res[curver].from;
             }
+			auto end_time = chrono::high_resolution_clock::now();
+			auto elapsed_mcs = chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
             print_track(cruise, ind2tr, ind2city);
+			cout<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
+			cout<<"max rss = "<<get_rss()<<" KB"<<endl;
+			cout<<endl;
         }
         else if (mode==3)
         {
@@ -603,6 +616,7 @@ int main(int argc, char** argv)
                 if (flag==1) break;
                 cout<<"Такого города не найдено в базе данных. Введите другой город или 0 чтобы выйти"<<endl;
             }
+			auto begin_time = chrono::high_resolution_clock::now();
             //Алгоритм Дейкстры 3 режима
             edgemap res = algo3(graph, count_id1, en_transp, from_id);
             //Проход по пути с его выводом
@@ -614,7 +628,12 @@ int main(int argc, char** argv)
                 cruise=cruise+res[curver];
                 curver=res[curver].from;
             }
+			auto end_time = chrono::high_resolution_clock::now();
+			auto elapsed_mcs = chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
             print_track(cruise, ind2tr, ind2city);
+			cout<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
+			cout<<"max rss = "<<get_rss()<<" KB"<<endl;
+			cout<<endl;
         }
         else if (mode==4)
         {
@@ -622,6 +641,10 @@ int main(int argc, char** argv)
             cout<<"Введите максимальную стоимость поездки руб: ";
             cin>>maxcost_str;
             unsigned long maxcost = strtoul(maxcost_str.c_str(), nullptr, 10);
+			auto begin_time = chrono::high_resolution_clock::now();
+			auto end_time = chrono::high_resolution_clock::now();
+			auto elapsed_mcs = chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
+			begin_time = chrono::high_resolution_clock::now();
             //Алгоритм поиска в ширину 4 режима
             edgemap res = algo4(graph, count_id1, en_transp, from_id, maxcost);
             cout<<endl;
@@ -642,16 +665,25 @@ int main(int argc, char** argv)
                     cruise=cruise+res[curver];
                     curver=res[curver].from;
                 }
+				end_time = chrono::high_resolution_clock::now();
+				elapsed_mcs += chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
                 print_track(cruise, ind2tr, ind2city);
                 cout<<"Чтобы вывести новый город введите 1, чтобы завершить алгоритм, введите 0"<<endl;
                 cout<<">> ";
                 string w;
                 cin>>w;
 				cout<<endl;
+				begin_time = chrono::high_resolution_clock::now();
                 if (w=="0") break;
                 i++;
             }
+			end_time = chrono::high_resolution_clock::now();
+			elapsed_mcs += chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
             cout<<"Больше таких городов нет"<<endl;
+			cout<<endl;
+			cout<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
+			cout<<"max rss = "<<get_rss()<<" KB"<<endl;
+			cout<<endl;
 
         }
         else
@@ -660,6 +692,10 @@ int main(int argc, char** argv)
             cout<<"Введите максимальное время поездки мин: ";
             cin>>maxtime_str;
             unsigned long maxtime=strtoul(maxtime_str.c_str(), nullptr, 10);
+			auto begin_time = chrono::high_resolution_clock::now();
+			auto end_time = chrono::high_resolution_clock::now();
+			auto elapsed_mcs = chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
+			begin_time = chrono::high_resolution_clock::now();
             //Алгоритм поиска в ширину 5 режима
             edgemap res = algo5(graph, count_id1, en_transp, from_id, maxtime);
             cout<<endl;
@@ -671,6 +707,8 @@ int main(int argc, char** argv)
                     i++;
                     continue;
                 }
+				end_time = chrono::high_resolution_clock::now();
+				elapsed_mcs += chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
                 cout<<ind2city[i]<<endl;
                 track cruise=track({});
                 unsigned long curver=i;
@@ -686,10 +724,15 @@ int main(int argc, char** argv)
                 string w;
                 cin>>w;
 				cout<<endl;
+				begin_time = chrono::high_resolution_clock::now();
                 if (w=="0") break;
                 i++;
             }
             cout<<"Больше таких городов нет"<<endl;
+			cout<<endl;
+			cout<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
+			cout<<"max rss = "<<get_rss()<<" KB"<<endl;
+			cout<<endl;
         }
 
         cout<<"Для продолжения введите 1, для выхода 0"<<endl;
