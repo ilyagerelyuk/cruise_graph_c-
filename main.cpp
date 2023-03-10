@@ -280,15 +280,15 @@ edgemap algo5(gr_type &graph, unsigned long n_cities, numset &transport, unsigne
 void print_track(track &tr, map<unsigned long, string> &ind2tr, map<unsigned long, string> &ind2city)
 {
     cout<<endl;
-    for (vector<edge>::iterator it = tr.way.begin();it!=tr.way.end();it++)
-    {
-        if ((it->from==0) && (it->to==0))
+	if (tr.way.size()==0)
         {
             cout<<"Такого пути не существует"<<endl;
             cout<<"================================================="<<endl;
             cout<<endl;
             return;
         }
+    for (vector<edge>::iterator it = tr.way.begin();it!=tr.way.end();it++)
+    {
         cout<<ind2tr[it->transport_type];
         cout<<" из ";
         cout<<ind2city[it->from];
@@ -304,7 +304,7 @@ void print_track(track &tr, map<unsigned long, string> &ind2tr, map<unsigned lon
 
 int main(int argc, char** argv)
 {
-    const char* input_file=argv[0];
+    const char* input_file=argv[1];
     setlocale(0, "");
     //SetConsoleOutputCP(65001);
 
@@ -536,6 +536,7 @@ int main(int argc, char** argv)
             unsigned long curver=to_id;
             while (curver!=from_id)
             {
+				if (res.count(curver)==0) break;
                 cruise=cruise+res[curver];
                 curver=res[curver].from;
             }
@@ -572,6 +573,7 @@ int main(int argc, char** argv)
             unsigned long curver=to_id;
             while (curver!=from_id)
             {
+				if (res.count(curver)==0) break;
                 cruise=cruise+res[curver];
                 curver=res[curver].from;
             }
@@ -608,6 +610,7 @@ int main(int argc, char** argv)
             unsigned long curver=to_id;
             while (curver!=from_id)
             {
+				if (res.count(curver)==0) break;
                 cruise=cruise+res[curver];
                 curver=res[curver].from;
             }
@@ -635,6 +638,7 @@ int main(int argc, char** argv)
                 unsigned long curver=i;
                 while (curver!=from_id)
                 {
+					if (res.count(curver)==0) break;
                     cruise=cruise+res[curver];
                     curver=res[curver].from;
                 }
@@ -671,6 +675,7 @@ int main(int argc, char** argv)
                 unsigned long curver=i;
                 while (curver!=from_id)
                 {
+					if (res.count(curver)==0) break;
                     cruise=cruise+res[curver];
                     curver=res[curver].from;
                 }
