@@ -5,7 +5,6 @@
 #include <set>
 #include <queue>
 #include <fstream>
-#include <locale>
 #include <limits>
 
 
@@ -100,9 +99,9 @@ edgemap algo1(gr_type &graph, unsigned long n_cities, numset &transport, unsigne
          if (cur_time > d[cur_num].first) continue;
          if ((cur_time == d[cur_num].first) && (cur_cost > d[cur_num].second)) continue;
          map<unsigned long, vector<edge>> ways = graph[cur_num];
-         for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)//Итерация по вершинам назначения
+         for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)
          {
-             for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)//Итерация по путям в нее из тек
+             for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)
              {
                  if (transport.count(it2->transport_type)==0) continue;
                  if (d[it->first].first > d[cur_num].first+(it2->cruise_time))
@@ -146,9 +145,9 @@ edgemap algo2(gr_type &graph, unsigned long n_cities, numset &transport, unsigne
          if (cur_cost > d[cur_num].first) continue;
          if ((cur_cost == d[cur_num].first) && (cur_time > d[cur_num].second)) continue;
          map<unsigned long, vector<edge>> ways = graph[cur_num];
-         for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)//Итерация по вершинам назначения
+         for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)
          {
-             for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)//Итерация по путям в нее из тек
+             for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)
              {
                  if (transport.count(it2->transport_type)==0) continue;
                  if (d[it->first].first > d[cur_num].first+(it2->cruise_fare))
@@ -189,9 +188,9 @@ edgemap algo3(gr_type &graph, unsigned long n_cities, numset &transport, unsigne
          q.pop();
          if (cur_edges > d[cur_num]) continue;
          map<unsigned long, vector<edge>> ways = graph[cur_num];
-         for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)//Итерация по вершинам назначения
+         for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)
          {
-             for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)//Итерация по путям в нее из тек
+             for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)
              {
                  if (transport.count(it2->transport_type)==0) continue;
                  if (d[it->first] > d[cur_num]+1)
@@ -224,9 +223,9 @@ edgemap algo4(gr_type &graph, unsigned long n_cities, numset &transport, unsigne
          if (cur_cost > d[cur_num]) continue;
          if (cur_cost > maxcost) break;
          map<unsigned long, vector<edge>> ways = graph[cur_num];
-         for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)//Итерация по вершинам назначения
+         for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)
          {
-             for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)//Итерация по путям в нее из тек
+             for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)
              {
                  if (transport.count(it2->transport_type)==0) continue;
                  if ((d[it->first] > d[cur_num]+it2->cruise_fare) && (d[cur_num]+it2->cruise_fare <= maxcost))
@@ -259,9 +258,9 @@ edgemap algo5(gr_type &graph, unsigned long n_cities, numset &transport, unsigne
          if (cur_time > d[cur_num]) continue;
          if (cur_time > maxtime) break;
          map<unsigned long, vector<edge>> ways = graph[cur_num];
-         for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)//Итерация по вершинам назначения
+         for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)
          {
-             for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)//Итерация по путям в нее из тек
+             for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)
              {
                  if (transport.count(it2->transport_type)==0) continue;
                  if ((d[it->first] > d[cur_num]+it2->cruise_time) && (d[cur_num]+it2->cruise_time <= maxtime))
@@ -503,7 +502,7 @@ int main(int argc, char** argv)
                 }
             }
             if (flag==1) break;
-            cout<<"Такого города не найдено в базе данных. Введите другой город или нажмите 0 чтобы выйти из программы"<<endl;
+            cout<<"Такого города не найдено в базе данных. Введите другой город или введите 0 чтобы выйти из программы"<<endl;
         }
         if (mode==1) // 1 РЕЖИМ
         {
@@ -523,11 +522,12 @@ int main(int argc, char** argv)
                 }
                 if ((to_id == from_id) && (flag==1))
                 {
-                    cout<<"Город прибытия совпадает с городом отправления. Введите другой город или нажмите 0 чтобы выйти из программы"<<endl;
+                    cout<<"Город прибытия совпадает с городом отправления. ";
+					cout<<"Введите другой город или 0 чтобы выйти из программы"<<endl;
                     continue;
                 }
                 if (flag==1) break;
-                cout<<"Такого города не найдено в базе данных. Введите другой город или нажмите 0 чтобы выйти из программы"<<endl;
+                cout<<"Такого города не найдено в базе данных. Введите другой город или введите 0 чтобы выйти из программы"<<endl;
             }
             //Алгоритм Дейкстры 1 режима
             edgemap res = algo1(graph, count_id1, en_transp, from_id);
@@ -560,11 +560,11 @@ int main(int argc, char** argv)
                 }
                 if ((to_id == from_id) && (flag==1))
                 {
-                    cout<<"Город прибытия совпадает с городом отправления. Введите другой город или нажмите 0 чтобы выйти"<<endl;
+                    cout<<"Город прибытия совпадает с городом отправления. Введите другой город или введите 0 чтобы выйти"<<endl;
                     continue;
                 }
                 if (flag==1) break;
-                cout<<"Такого города не найдено в базе данных. Введите другой город или нажмите 0 чтобы выйти"<<endl;
+                cout<<"Такого города не найдено в базе данных. Введите другой город или 0 чтобы выйти"<<endl;
             }
             //Алгоритм Дейкстры 2 режима
             edgemap res = algo2(graph, count_id1, en_transp, from_id);
@@ -597,11 +597,11 @@ int main(int argc, char** argv)
                 }
                 if ((to_id == from_id) && (flag==1))
                 {
-                    cout<<"Город прибытия совпадает с городом отправления. Введите другой город или нажмите 0 чтобы выйти"<<endl;
+                    cout<<"Город прибытия совпадает с городом отправления. Введите другой город или 0 чтобы выйти"<<endl;
                     continue;
                 }
                 if (flag==1) break;
-                cout<<"Такого города не найдено в базе данных. Введите другой город или нажмите 0 чтобы выйти"<<endl;
+                cout<<"Такого города не найдено в базе данных. Введите другой город или 0 чтобы выйти"<<endl;
             }
             //Алгоритм Дейкстры 3 режима
             edgemap res = algo3(graph, count_id1, en_transp, from_id);
@@ -643,10 +643,11 @@ int main(int argc, char** argv)
                     curver=res[curver].from;
                 }
                 print_track(cruise, ind2tr, ind2city);
-                cout<<"Чтобы вывести новый город нажмите 1, чтобы завершить алгоритм, нажмите 0"<<endl;
+                cout<<"Чтобы вывести новый город введите 1, чтобы завершить алгоритм, введите 0"<<endl;
                 cout<<">> ";
                 string w;
                 cin>>w;
+				cout<<endl;
                 if (w=="0") break;
                 i++;
             }
@@ -680,17 +681,18 @@ int main(int argc, char** argv)
                     curver=res[curver].from;
                 }
                 print_track(cruise, ind2tr, ind2city);
-                cout<<"Чтобы вывести новый город нажмите 1, чтобы завершить алгоритм, нажмите 0"<<endl;
+                cout<<"Чтобы вывести новый город введите 1, чтобы завершить алгоритм, введите 0"<<endl;
                 cout<<">> ";
                 string w;
                 cin>>w;
+				cout<<endl;
                 if (w=="0") break;
                 i++;
             }
             cout<<"Больше таких городов нет"<<endl;
         }
 
-        cout<<"Для продолжения нажмите 1, для выхода 0"<<endl;
+        cout<<"Для продолжения введите 1, для выхода 0"<<endl;
         short num;
         cin>>num;
         cout<<endl;
