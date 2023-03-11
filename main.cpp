@@ -497,7 +497,7 @@ int main(int argc, char** argv)
             short flag=0;
             if (city2ind.find(from) !=  city2ind.end())
 			{
-				to_id=city2ind[from];
+				from_id=city2ind[from];
 				flag=1;
 			}
             if (flag==1) break;
