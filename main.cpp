@@ -417,12 +417,15 @@ int main(int argc, char** argv)
         cout<<"2 - Ввести виды транспорта на которых запрещено ехать"<<endl;
         cout<<"3 - Нет ограничений на виды транспорта"<<endl;
         cout<<">> ";
-        int tp;
+        string tp;
+		cin.clear();
         while(1)
         {
+			cin.clear();
             cin>>tp;
+			cout<<tp<<endl;
             cout<<endl;
-            if (tp==1)//Ввод разрешенных видов транспорта
+            if (tp=="1")//Ввод разрешенных видов транспорта
             {
                 cout<<"Введите названия разрешенных видов транспорта со строчной буквы через Enter"<<endl;
                 cout<<"По окончании введите 0"<<endl;
@@ -444,7 +447,7 @@ int main(int argc, char** argv)
                 }
                 break;
             }
-            else if (tp==2)//Ввод запрещенных видов транспорта
+            else if (tp=="2")//Ввод запрещенных видов транспорта
             {
                 set<unsigned long> zapr;
                 cout<<"Введите названия запрещенных видов транспорта со строчной буквы через Enter"<<endl;
@@ -470,7 +473,7 @@ int main(int argc, char** argv)
                 }
                 break;
             }
-            else if (tp==3)//Все разрешены
+            else if (tp=="3")//Все разрешены
             {
                 cout<<"Разрешены все известные виды транспорта"<<endl;
                 cout<<endl;
@@ -483,6 +486,7 @@ int main(int argc, char** argv)
             else
             {
                 cout<<"Вы Ошиблись. Введите цифру заново"<<endl;
+				cout<<">> ";
             }
         }
         string from;
