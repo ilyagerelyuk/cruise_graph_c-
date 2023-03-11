@@ -509,7 +509,6 @@ int main(int argc, char** argv)
             while(1)
             {
                 getline(cin, to);
-				cout<<"+"<<to<<"+"<<endl;//Удалить
                 if (to=="0") exit(0);
                 short flag=0;
 				if (city2ind.find(to) !=  city2ind.end())
@@ -523,7 +522,6 @@ int main(int argc, char** argv)
 					cout<<"Введите другой город или 0 чтобы выйти из программы"<<endl;
                     continue;
                 }
-				cout<<to_id<<" "<<flag<<endl;//Удалить
                 if (flag==1) break;
                 cout<<"Такого города не найдено в базе данных. Введите другой город или введите 0 чтобы выйти из программы"<<endl;
             }
