@@ -8,6 +8,7 @@
 #include <limits>
 #include <chrono>
 #include <sys/resource.h>
+#include <ncurses.h>
 
 
 using namespace std;
@@ -309,7 +310,9 @@ void print_track(track &tr, map<unsigned long, string> &ind2tr, map<unsigned lon
 
 int main(int argc, char** argv)
 {
-	cout<<"start prog max rss = "<<get_rss()<<" KB"<<endl;
+	ofstream log;
+	log.open("log.txt", ios::out | ios::trunc);
+	log<<"start prog max rss = "<<get_rss()<<" KB"<<endl;
     const char* input_file=argv[1];
     setlocale(0, "");
     //SetConsoleOutputCP(65001);
@@ -394,7 +397,7 @@ int main(int argc, char** argv)
         edge ed=edge(id_from, id_to, id_tr, cruise_time, cruise_fare);
         graph[id_from][id_to].push_back(ed);
     }
-	cout<<"after graph uploading max rss = "<<get_rss()<<" KB"<<endl;
+	log<<"after graph uploading max rss = "<<get_rss()<<" KB"<<endl;
     while(1)//Основной цикл программы
     {
         cout<<endl;
@@ -544,8 +547,10 @@ int main(int argc, char** argv)
 			auto end_time = chrono::high_resolution_clock::now();
 			auto elapsed_mcs = chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
             print_track(cruise, ind2tr, ind2city);
-			cout<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
-			cout<<"max rss = "<<get_rss()<<" KB"<<endl;
+			log<<"calling algorithm 1"<<endl;
+			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
+			log<<"max rss = "<<get_rss()<<" KB"<<endl;
+			log<<"========================"<<endl;
 			cout<<endl;
         }
         else if (mode==2)//2 РЕЖИМ
@@ -586,8 +591,10 @@ int main(int argc, char** argv)
 			auto end_time = chrono::high_resolution_clock::now();
 			auto elapsed_mcs = chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
             print_track(cruise, ind2tr, ind2city);
-			cout<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
-			cout<<"max rss = "<<get_rss()<<" KB"<<endl;
+			log<<"calling algorithm 2"<<endl;
+			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
+			log<<"max rss = "<<get_rss()<<" KB"<<endl;
+			log<<"========================"<<endl;
 			cout<<endl;
         }
         else if (mode==3)
@@ -628,12 +635,15 @@ int main(int argc, char** argv)
 			auto end_time = chrono::high_resolution_clock::now();
 			auto elapsed_mcs = chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
             print_track(cruise, ind2tr, ind2city);
-			cout<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
-			cout<<"max rss = "<<get_rss()<<" KB"<<endl;
+			log<<"calling algorithm 3"<<endl;
+			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
+			log<<"max rss = "<<get_rss()<<" KB"<<endl;
+			log<<"========================"<<endl;
 			cout<<endl;
         }
         else if (mode==4)
         {
+			short ifcity=0;
             string maxcost_str;
             cout<<"Введите максимальную стоимость поездки руб: ";
             cin>>maxcost_str;
@@ -654,6 +664,7 @@ int main(int argc, char** argv)
                     continue;
                 }
                 cout<<ind2city[i]<<endl;
+				ifcity=1;
                 track cruise=track({});
                 unsigned long curver=i;
                 while (curver!=from_id)
@@ -676,15 +687,19 @@ int main(int argc, char** argv)
             }
 			end_time = chrono::high_resolution_clock::now();
 			elapsed_mcs += chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
-            cout<<"Больше таких городов нет"<<endl;
+            if (ifcity==0) cout<<"Таких городов нет"<<endl;
+            else cout<<"===============Конец=============="<<endl;
 			cout<<endl;
-			cout<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
-			cout<<"max rss = "<<get_rss()<<" KB"<<endl;
+			log<<"calling algorithm 4"<<endl;
+			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
+			log<<"max rss = "<<get_rss()<<" KB"<<endl;
+			log<<"========================"<<endl;
 			cout<<endl;
 
         }
         else
         {
+			short ifcity=0;
             string maxtime_str;
             cout<<"Введите максимальное время поездки мин: ";
             cin>>maxtime_str;
@@ -707,6 +722,7 @@ int main(int argc, char** argv)
 				end_time = chrono::high_resolution_clock::now();
 				elapsed_mcs += chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
                 cout<<ind2city[i]<<endl;
+				ifcity=1;
                 track cruise=track({});
                 unsigned long curver=i;
                 while (curver!=from_id)
@@ -725,10 +741,13 @@ int main(int argc, char** argv)
                 if (w=="0") break;
                 i++;
             }
-            cout<<"Больше таких городов нет"<<endl;
+			if (ifcity==0) cout<<"Таких городов нет"<<endl;
+            else cout<<"===============Конец=============="<<endl;
 			cout<<endl;
-			cout<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
-			cout<<"max rss = "<<get_rss()<<" KB"<<endl;
+			log<<"calling algorithm 5"<<endl;
+			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
+			log<<"max rss = "<<get_rss()<<" KB"<<endl;
+			log<<"========================"<<endl;
 			cout<<endl;
         }
 
