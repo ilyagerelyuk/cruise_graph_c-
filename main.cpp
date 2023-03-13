@@ -84,48 +84,48 @@ typedef map<unsigned long, edge> edgemap;
 
 edgemap algo1(gr_type &graph, unsigned long n_cities, numset &transport, unsigned long start)
 {
-     unsigned long MAX_UL = numeric_limits<unsigned long>::max();
-     vector<numpair> d(n_cities, {MAX_UL, MAX_UL});//d=[{время, стоимость}] Лучшие* в этот город
-     edgemap p;//p[куда]=ребро - Запоминание путей
-     d[start].first=0;//Время
-     d[start].second=0;//Стоимость
-     priority_queue<troika, vector<troika>, greater<troika>> q;//Куча {время, стоимость, номер вершины}
-     q.push({0,0,start});
-     while(!q.empty())
-     {
-         troika elem = q.top();
-         unsigned long cur_time = get<0>(elem);
-         unsigned long cur_cost = get<1>(elem);
-         unsigned long cur_num = get<2>(elem);
-         q.pop();
-         if (cur_time > d[cur_num].first) continue;
-         if ((cur_time == d[cur_num].first) && (cur_cost > d[cur_num].second)) continue;
-         map<unsigned long, vector<edge>> ways = graph[cur_num];
-         for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)
-         {
-             for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)
-             {
-                 if (transport.count(it2->transport_type)==0) continue;
-                 if (d[it->first].first > d[cur_num].first+(it2->cruise_time))
-                 {
-                     d[it->first].first = d[cur_num].first+(it2->cruise_time);
-                     d[it->first].second = d[cur_num].second+(it2->cruise_fare);
-                     p[it->first] = edge(cur_num, it->first, it2->transport_type, it2->cruise_time, it2->cruise_fare);
-                     q.push({d[it->first].first, d[it->first].second, it->first});
-                 }
-                 else if ((d[it->first].first == d[cur_num].first+(it2->cruise_time)) &&
-                           (d[it->first].second > d[cur_num].second +(it2->cruise_fare)))
-                 {
-                     d[it->first].first = d[cur_num].first+(it2->cruise_time);
-                     d[it->first].second = d[cur_num].second+(it2->cruise_fare);
-                     p[it->first] = edge(cur_num, it->first, it2->transport_type, it2->cruise_time, it2->cruise_fare);
-                     q.push({d[it->first].first, d[it->first].second, it->first});
-                 }
-             }
-         }
-     }
+	unsigned long MAX_UL = numeric_limits<unsigned long>::max();
+	vector<numpair> d(n_cities, {MAX_UL, MAX_UL});//d=[{время, стоимость}] Лучшие* в этот город
+	edgemap p;//p[куда]=ребро - Запоминание путей
+	d[start].first=0;//Время
+	d[start].second=0;//Стоимость
+	priority_queue<troika, vector<troika>, greater<troika>> q;//Куча {время, стоимость, номер вершины}
+	q.push({0,0,start});
+	while(!q.empty())
+	{
+		troika elem = q.top();
+		unsigned long cur_time = get<0>(elem);
+		unsigned long cur_cost = get<1>(elem);
+		unsigned long cur_num = get<2>(elem);
+		q.pop();
+		if (cur_time > d[cur_num].first) continue;
+		if ((cur_time == d[cur_num].first) && (cur_cost > d[cur_num].second)) continue;
+		map<unsigned long, vector<edge>> ways = graph[cur_num];
+		for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)
+		{
+			for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)
+			{
+				if (transport.count(it2->transport_type)==0) continue;
+				if (d[it->first].first > d[cur_num].first+(it2->cruise_time))
+					{
+					d[it->first].first = d[cur_num].first+(it2->cruise_time);
+					d[it->first].second = d[cur_num].second+(it2->cruise_fare);
+					p[it->first] = edge(cur_num, it->first, it2->transport_type, it2->cruise_time, it2->cruise_fare);
+					q.push({d[it->first].first, d[it->first].second, it->first});
+					}
+				else if ((d[it->first].first == d[cur_num].first+(it2->cruise_time)) && 
+				(d[it->first].second > d[cur_num].second +(it2->cruise_fare)))
+					{
+					d[it->first].first = d[cur_num].first+(it2->cruise_time);
+					d[it->first].second = d[cur_num].second+(it2->cruise_fare);
+					p[it->first] = edge(cur_num, it->first, it2->transport_type, it2->cruise_time, it2->cruise_fare);
+					q.push({d[it->first].first, d[it->first].second, it->first});
+					}
+			}
+		}
+	}
 
-     return p;
+	return p;
 }
 
 edgemap algo2(gr_type &graph, unsigned long n_cities, numset &transport, unsigned long start)
@@ -176,32 +176,30 @@ edgemap algo2(gr_type &graph, unsigned long n_cities, numset &transport, unsigne
 
 edgemap algo3(gr_type &graph, unsigned long n_cities, numset &transport, unsigned long start)
 {
-     unsigned long MAX_UL = numeric_limits<unsigned long>::max();
-     numvec d(n_cities, MAX_UL);//d=[{мин количество поездок до города}]
+	 unsigned long MAX_UL = numeric_limits<unsigned long>::max();
+	 queue<unsigned long> q;
+	 q.push(start);
+     numvec d(n_cities, MAX_UL);
      edgemap p;//p[куда]=ребро - Запоминание путей
      d[start]=0;
-     priority_queue<numpair, vector<numpair>, greater<numpair>> q;//Куча {рейсов, номер вершины}
-     q.push({0,start});
      while(!q.empty())
      {
-         numpair elem = q.top();
-         unsigned long cur_edges = elem.first;
-         unsigned long cur_num = elem.second;
+         unsigned long v = q.front();
          q.pop();
-         if (cur_edges > d[cur_num]) continue;
-         map<unsigned long, vector<edge>> ways = graph[cur_num];
+         map<unsigned long, vector<edge>> ways = graph[v];
          for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)
          {
-             for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)
-             {
-                 if (transport.count(it2->transport_type)==0) continue;
-                 if (d[it->first] > d[cur_num]+1)
-                 {
-                     d[it->first] = d[cur_num]+1;
-                     p[it->first] = edge(cur_num, it->first, it2->transport_type, it2->cruise_time, it2->cruise_fare);
-                     q.push({d[it->first], it->first});
-                 }
-             }
+			 if (d[it->first]==MAX_UL)
+			 {
+				 for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)
+				 {
+					 if (transport.count(it2->transport_type)==0) continue;
+					 d[it->first] = d[v]+1;
+					 p[it->first] = edge(v, it->first, it2->transport_type, it2->cruise_time, it2->cruise_fare);
+					 q.push(it->first);
+					 break;
+				 }
+			 }
          }
      }
 
@@ -505,7 +503,8 @@ int main(int argc, char** argv)
 				flag=1;
 			}
             if (flag==1) break;
-            cout<<"Такого города не найдено в базе данных. Введите другой город или введите 0 чтобы выйти из программы"<<endl;
+            cout<<"Такого города не найдено в базе данных. ";
+			cout<<"Введите другой город или введите 0 чтобы выйти из программы"<<endl;
         }
         if (mode==1) // 1 РЕЖИМ
         {
@@ -527,7 +526,8 @@ int main(int argc, char** argv)
                     continue;
                 }
                 if (flag==1) break;
-                cout<<"Такого города не найдено в базе данных. Введите другой город или введите 0 чтобы выйти из программы"<<endl;
+                cout<<"Такого города не найдено в базе данных. ";
+				cout<<"Введите другой город или введите 0 чтобы выйти из программы"<<endl;
             }
 			auto begin_time = chrono::high_resolution_clock::now();
             //Алгоритм Дейкстры 1 режима
@@ -563,11 +563,13 @@ int main(int argc, char** argv)
 				}
                 if ((to_id == from_id) && (flag==1))
                 {
-                    cout<<"Город прибытия совпадает с городом отправления. Введите другой город или введите 0 чтобы выйти"<<endl;
+                    cout<<"Город прибытия совпадает с городом отправления. ";
+					cout<<"Введите другой город или введите 0 чтобы выйти"<<endl;
                     continue;
                 }
                 if (flag==1) break;
-                cout<<"Такого города не найдено в базе данных. Введите другой город или 0 чтобы выйти"<<endl;
+                cout<<"Такого города не найдено в базе данных. ";
+				cout<<"Введите другой город или введите 0 чтобы выйти из программы"<<endl;
             }
 			auto begin_time = chrono::high_resolution_clock::now();
             //Алгоритм Дейкстры 2 режима
@@ -603,11 +605,13 @@ int main(int argc, char** argv)
 				}
                 if ((to_id == from_id) && (flag==1))
                 {
-                    cout<<"Город прибытия совпадает с городом отправления. Введите другой город или 0 чтобы выйти"<<endl;
+                    cout<<"Город прибытия совпадает с городом отправления. ";
+					cout<<"Введите другой город или 0 чтобы выйти"<<endl;
                     continue;
                 }
                 if (flag==1) break;
-                cout<<"Такого города не найдено в базе данных. Введите другой город или 0 чтобы выйти"<<endl;
+                cout<<"Такого города не найдено в базе данных. ";
+				cout<<"Введите другой город или 0 чтобы выйти"<<endl;
             }
 			auto begin_time = chrono::high_resolution_clock::now();
             //Алгоритм Дейкстры 3 режима
