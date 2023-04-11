@@ -101,23 +101,24 @@ edgemap algo1(gr_type &graph, unsigned long n_cities, numset &transport, unsigne
 		map<unsigned long, vector<edge>> ways = graph[cur_num];
 		for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)
 		{
+			int numcity = it->first;
 			for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)
 			{
 				if (transport.count(it2->transport_type)==0) continue;
-				if (d[it->first].first > d[cur_num].first+(it2->cruise_time))
+				if (d[numcity].first > d[cur_num].first+(it2->cruise_time))
 					{
-					d[it->first].first = d[cur_num].first+(it2->cruise_time);
-					d[it->first].second = d[cur_num].second+(it2->cruise_fare);
-					p[it->first] = edge(cur_num, it->first, it2->transport_type, it2->cruise_time, it2->cruise_fare);
-					q.push({d[it->first].first, d[it->first].second, it->first});
+					d[numcity].first = d[cur_num].first+(it2->cruise_time);
+					d[numcity].second = d[cur_num].second+(it2->cruise_fare);
+					p[numcity] = edge(cur_num, numcity, it2->transport_type, it2->cruise_time, it2->cruise_fare);
+					q.push({d[numcity].first, d[numcity].second, numcity});
 					}
-				else if ((d[it->first].first == d[cur_num].first+(it2->cruise_time)) && 
-				(d[it->first].second > d[cur_num].second +(it2->cruise_fare)))
+				else if ((d[numcity].first == d[cur_num].first+(it2->cruise_time)) && 
+				(d[numcity].second > d[cur_num].second +(it2->cruise_fare)))
 					{
-					d[it->first].first = d[cur_num].first+(it2->cruise_time);
-					d[it->first].second = d[cur_num].second+(it2->cruise_fare);
-					p[it->first] = edge(cur_num, it->first, it2->transport_type, it2->cruise_time, it2->cruise_fare);
-					q.push({d[it->first].first, d[it->first].second, it->first});
+					d[numcity].first = d[cur_num].first+(it2->cruise_time);
+					d[numcity].second = d[cur_num].second+(it2->cruise_fare);
+					p[numcity] = edge(cur_num, numcity, it2->transport_type, it2->cruise_time, it2->cruise_fare);
+					q.push({d[numcity].first, d[numcity].second, numcity});
 					}
 			}
 		}
@@ -147,23 +148,24 @@ edgemap algo2(gr_type &graph, unsigned long n_cities, numset &transport, unsigne
          map<unsigned long, vector<edge>> ways = graph[cur_num];
          for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)
          {
+			 int numcity = it->first;
              for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)
              {
                  if (transport.count(it2->transport_type)==0) continue;
-                 if (d[it->first].first > d[cur_num].first+(it2->cruise_fare))
+                 if (d[numcity].first > d[cur_num].first+(it2->cruise_fare))
                  {
-                     d[it->first].first = d[cur_num].first+(it2->cruise_fare);
-                     d[it->first].second = d[cur_num].second+(it2->cruise_time);
-                     p[it->first] = edge(cur_num, it->first, it2->transport_type, it2->cruise_time, it2->cruise_fare);
-                     q.push({d[it->first].first, d[it->first].second, it->first});
+                     d[numcity].first = d[cur_num].first+(it2->cruise_fare);
+                     d[numcity].second = d[cur_num].second+(it2->cruise_time);
+                     p[numcity] = edge(cur_num, numcity, it2->transport_type, it2->cruise_time, it2->cruise_fare);
+                     q.push({d[numcity].first, d[numcity].second, numcity});
                  }
-                 else if ((d[it->first].first == d[cur_num].first+(it2->cruise_fare)) &&
-                           (d[it->first].second > d[cur_num].second +(it2->cruise_time)))
+                 else if ((d[numcity].first == d[cur_num].first+(it2->cruise_fare)) &&
+                           (d[numcity].second > d[cur_num].second +(it2->cruise_time)))
                  {
-                     d[it->first].first = d[cur_num].first+(it2->cruise_fare);
-                     d[it->first].second = d[cur_num].second+(it2->cruise_time);
-                     p[it->first] = edge(cur_num, it->first, it2->transport_type, it2->cruise_time, it2->cruise_fare);
-                     q.push({d[it->first].first, d[it->first].second, it->first});
+                     d[numcity].first = d[cur_num].first+(it2->cruise_fare);
+                     d[numcity].second = d[cur_num].second+(it2->cruise_time);
+                     p[numcity] = edge(cur_num, numcity, it2->transport_type, it2->cruise_time, it2->cruise_fare);
+                     q.push({d[numcity].first, d[numcity].second, numcity});
                  }
              }
          }
@@ -187,14 +189,15 @@ edgemap algo3(gr_type &graph, unsigned long n_cities, numset &transport, unsigne
          map<unsigned long, vector<edge>> ways = graph[v];
          for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)
          {
-			 if (d[it->first]==MAX_UL)
+			 int numcity = it->first;
+			 if (d[numcity]==MAX_UL)
 			 {
 				 for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)
 				 {
 					 if (transport.count(it2->transport_type)==0) continue;
-					 d[it->first] = d[v]+1;
-					 p[it->first] = edge(v, it->first, it2->transport_type, it2->cruise_time, it2->cruise_fare);
-					 q.push(it->first);
+					 d[numcity] = d[v]+1;
+					 p[numcity] = edge(v, numcity, it2->transport_type, it2->cruise_time, it2->cruise_fare);
+					 q.push(numcity);
 					 break;
 				 }
 			 }
@@ -223,14 +226,15 @@ edgemap algo4(gr_type &graph, unsigned long n_cities, numset &transport, unsigne
          map<unsigned long, vector<edge>> ways = graph[cur_num];
          for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)
          {
+			 int numcity = it->first;
              for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)
              {
                  if (transport.count(it2->transport_type)==0) continue;
-                 if ((d[it->first] > d[cur_num]+it2->cruise_fare) && (d[cur_num]+it2->cruise_fare <= maxcost))
+                 if ((d[numcity] > d[cur_num]+it2->cruise_fare) && (d[cur_num]+it2->cruise_fare <= maxcost))
                  {
-                     d[it->first] = d[cur_num]+it2->cruise_fare;
-                     p[it->first] = edge(cur_num, it->first, it2->transport_type, it2->cruise_time, it2->cruise_fare);
-                     q.push({d[it->first], it->first});
+                     d[numcity] = d[cur_num]+it2->cruise_fare;
+                     p[numcity] = edge(cur_num, numcity, it2->transport_type, it2->cruise_time, it2->cruise_fare);
+                     q.push({d[numcity], numcity});
                  }
              }
          }
@@ -258,14 +262,15 @@ edgemap algo5(gr_type &graph, unsigned long n_cities, numset &transport, unsigne
          map<unsigned long, vector<edge>> ways = graph[cur_num];
          for (map<unsigned long, vector<edge>>::iterator it=ways.begin(); it!=ways.end(); it++)
          {
+			 int numcity = it->first;
              for (vector<edge>::iterator it2=(it->second).begin();it2!=(it->second).end();it2++)
              {
                  if (transport.count(it2->transport_type)==0) continue;
-                 if ((d[it->first] > d[cur_num]+it2->cruise_time) && (d[cur_num]+it2->cruise_time <= maxtime))
+                 if ((d[numcity] > d[cur_num]+it2->cruise_time) && (d[cur_num]+it2->cruise_time <= maxtime))
                  {
-                     d[it->first] = d[cur_num]+it2->cruise_time;
-                     p[it->first] = edge(cur_num, it->first, it2->transport_type, it2->cruise_time, it2->cruise_fare);
-                     q.push({d[it->first], it->first});
+                     d[numcity] = d[cur_num]+it2->cruise_time;
+                     p[numcity] = edge(cur_num, numcity, it2->transport_type, it2->cruise_time, it2->cruise_fare);
+                     q.push({d[numcity], numcity});
                  }
              }
          }
