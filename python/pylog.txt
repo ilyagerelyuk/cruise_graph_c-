@@ -1,0 +1,18 @@
+start prog max rss = 12716 KB
+after graph uploading max rss = 12716 KB
+calling algorithm 5
+algo time elapsed 386.5 mcs
+max rss = 12716 KB
+========================
+calling algorithm 4
+algo time elapsed 76.8 mcs
+max rss = 12716 KB
+========================
+calling algorithm 5
+algo time elapsed 529.9 mcs
+max rss = 12716 KB
+========================
+calling algorithm 4
+algo time elapsed 478.597 mcs
+max rss = 12716 KB
+========================
