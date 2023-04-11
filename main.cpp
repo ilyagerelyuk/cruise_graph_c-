@@ -531,17 +531,18 @@ int main(int argc, char** argv)
             }
         }
         keypad(stdscr, false);
+		curs_set(1);
 		if (tp==3) continue;
 		if (tp==0)//Ввод разрешенных видов транспорта
 		{
-			char trtypec[20];
+			char trtypec[50];
 			clear();
 			curs_set(1);
 			keypad(stdscr, true);
 			addstr("Введите названия разрешенных видов транспорта со строчной буквы через Enter\n");
 			addstr("По окончании нажмите дважды Enter\n");
 			echo();
-			getstr(trtypec);
+			getnstr(trtypec, 50);
 			string trtype = trtypec;
 			while (1)
 			{
@@ -554,13 +555,13 @@ int main(int argc, char** argv)
 				{
 					addstr("Не найден данный вид транспорта. Продолжайте ввод\n");
 				}
-				getstr(trtypec);
+				getnstr(trtypec, 50);
 				trtype = trtypec;
 			}
 		}
 		else if (tp==1)//Ввод запрещенных видов транспорта
 		{
-			char trtypec[20];
+			char trtypec[50];
 			clear();
 			curs_set(1);
 			keypad(stdscr, true);
@@ -568,7 +569,7 @@ int main(int argc, char** argv)
 			addstr("Введите названия запрещенных видов транспорта со строчной буквы через Enter\n");
 			addstr("По окончании нажмите дважды Enter\n");
 			echo();
-			getstr(trtypec);
+			getnstr(trtypec, 50);
 			string trtype = trtypec;
 			while (1)
 			{
@@ -581,7 +582,7 @@ int main(int argc, char** argv)
 				{
 					addstr("Не найден данный вид транспорта. Продолжайте ввод\n");
 				}
-				getstr(trtypec);
+				getnstr(trtypec, 50);
 				trtype = trtypec;
 			}
 			for(map<unsigned long, string>::iterator it = ind2tr.begin(); it != ind2tr.end(); ++it) {
@@ -607,7 +608,7 @@ int main(int argc, char** argv)
         addstr("Введите город отправления\n");
         while(1)
         {
-            getstr(fromc);
+            getnstr(fromc, 50);
 			from = fromc;
             bool flag=false;
             if (city2ind.find(from) !=  city2ind.end())
@@ -624,7 +625,7 @@ int main(int argc, char** argv)
 			addstr("Введите город прибытия\n");
             while(1)
             {
-                getstr(toc);
+                getnstr(toc, 50);
 				to = toc;
                 bool flag=false;
 				if (city2ind.find(to) !=  city2ind.end())
@@ -668,7 +669,7 @@ int main(int argc, char** argv)
 			addstr("Введите город прибытия\n");
             while(1)
             {
-                getstr(toc);
+                getnstr(toc, 50);
 				to = toc;
                 bool flag=false;
                 if (city2ind.find(to) !=  city2ind.end())
@@ -712,7 +713,7 @@ int main(int argc, char** argv)
 			addstr("Введите город прибытия\n");
             while(1)
             {
-                getstr(toc);
+                getnstr(toc, 50);
 				to = toc;
                 bool flag=false;
                 if (city2ind.find(to) !=  city2ind.end())
@@ -756,7 +757,7 @@ int main(int argc, char** argv)
 			bool ifcity=false;
             char maxcost_str[10];
             addstr("Введите максимальную стоимость поездки руб ");
-            getstr(maxcost_str);
+            getnstr(maxcost_str, 10);
 			addstr("\n");
             unsigned long maxcost = strtoul(maxcost_str, nullptr, 10);
 			auto begin_time = chrono::high_resolution_clock::now();
@@ -789,11 +790,11 @@ int main(int argc, char** argv)
 				attroff(COLOR_PAIR(3));
 				addstr("\n");
                 print_track(cruise, ind2tr, ind2city);
-                addstr("Чтобы продолжить нажмите Enter, для выхода 0\n");
-                char w[1];
-                getstr(w);
+                addstr("Чтобы продолжить нажмите Enter, для выхода 0\n\n");
+                char w;
+                w = getch();
 				begin_time = chrono::high_resolution_clock::now();
-                if (w=="0") break;
+                if (w=='0') break;
                 i++;
             }
 			end_time = chrono::high_resolution_clock::now();
@@ -811,7 +812,7 @@ int main(int argc, char** argv)
 			bool ifcity=0;
             char maxtime_str[10];
             addstr("Введите максимальное время поездки мин\n");
-            getstr(maxtime_str);
+            getnstr(maxtime_str, 10);
 			addstr("\n");
             unsigned long maxtime=strtoul(maxtime_str, nullptr, 10);
 			auto begin_time = chrono::high_resolution_clock::now();
@@ -844,11 +845,11 @@ int main(int argc, char** argv)
                 }
 				addstr("\n");
                 print_track(cruise, ind2tr, ind2city);
-                addstr("Чтобы продолжить нажмите Enter, для выхода 0\n");
-                char w[1];
-                getstr(w);
+                addstr("Чтобы продолжить нажмите Enter, для выхода 0\n\n");
+                char w;
+                w = getch();
 				begin_time = chrono::high_resolution_clock::now();
-                if (w=="0") break;
+                if (w=='0') break;
                 i++;
             }
 			if (ifcity==false) addstr("Таких городов нет\n\n");
