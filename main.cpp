@@ -618,7 +618,7 @@ int main(int argc, char** argv)
 			}
             if (flag) break;
             addstr("Такого города не найдено в базе данных. ");
-			addstr("Введите другой город или введите 0 чтобы выйти из программы\n");
+			addstr("Введите другой город\n");
         }
         if (mode==0) // 1 РЕЖИМ
         {
@@ -636,12 +636,12 @@ int main(int argc, char** argv)
                 if ((to_id == from_id) && (flag==true))
                 {
                     addstr("Город прибытия совпадает с городом отправления. ");
-					addstr("Введите другой город или 0 чтобы выйти из программы\n");
+					addstr("Введите другой город\n");
                     continue;
                 }
                 if (flag==true) break;
                 addstr("Такого города не найдено в базе данных. ");
-				addstr("Введите другой город или введите 0 чтобы выйти из программы\n");
+				addstr("Введите другой город\n");
             }
 			auto begin_time = chrono::high_resolution_clock::now();
             //Алгоритм Дейкстры 1 режима
@@ -659,10 +659,9 @@ int main(int argc, char** argv)
 			auto elapsed_mcs = chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
 			addstr("\n");
             print_track(cruise, ind2tr, ind2city);
-			log<<"calling algorithm 1"<<endl;
-			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
+			log<<"calling algorithm 1 ";
+			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs | ";
 			log<<"max rss = "<<get_rss()<<" KB"<<endl;
-			log<<"========================"<<endl;
         }
         else if (mode==1)//2 РЕЖИМ
         {
@@ -680,12 +679,12 @@ int main(int argc, char** argv)
                 if ((to_id == from_id) && (flag==true))
                 {
                     addstr("Город прибытия совпадает с городом отправления. ");
-					addstr("Введите другой город или 0 чтобы выйти из программы\n");
+					addstr("Введите другой город\n");
                     continue;
                 }
                 if (flag==true) break;
                 addstr("Такого города не найдено в базе данных. ");
-				addstr("Введите другой город или введите 0 чтобы выйти из программы\n");
+				addstr("Введите другой город\n");
             }
 			auto begin_time = chrono::high_resolution_clock::now();
             //Алгоритм Дейкстры 2 режима
@@ -703,10 +702,9 @@ int main(int argc, char** argv)
 			auto elapsed_mcs = chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
 			addstr("\n");
             print_track(cruise, ind2tr, ind2city);
-			log<<"calling algorithm 2"<<endl;
-			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
+			log<<"calling algorithm 2 ";
+			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs | ";
 			log<<"max rss = "<<get_rss()<<" KB"<<endl;
-			log<<"========================"<<endl;
         }
         else if (mode==2)
         {
@@ -724,12 +722,12 @@ int main(int argc, char** argv)
                 if ((to_id == from_id) && (flag==true))
                 {
                     addstr("Город прибытия совпадает с городом отправления. ");
-					addstr("Введите другой город или 0 чтобы выйти из программы\n");
+					addstr("Введите другой город\n");
                     continue;
                 }
                 if (flag==true) break;
                 addstr("Такого города не найдено в базе данных. ");
-				addstr("Введите другой город или введите 0 чтобы выйти из программы\n");
+				addstr("Введите другой город\n");
             }
 			auto begin_time = chrono::high_resolution_clock::now();
             //Алгоритм Дейкстры 3 режима
@@ -747,10 +745,9 @@ int main(int argc, char** argv)
 			auto elapsed_mcs = chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
 			addstr("\n");
             print_track(cruise, ind2tr, ind2city);
-			log<<"calling algorithm 3"<<endl;
-			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
+			log<<"calling algorithm 3 ";
+			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs | ";
 			log<<"max rss = "<<get_rss()<<" KB"<<endl;
-			log<<"========================"<<endl;
         }
         else if (mode==3)
         {
@@ -790,21 +787,17 @@ int main(int argc, char** argv)
 				attroff(COLOR_PAIR(3));
 				addstr("\n");
                 print_track(cruise, ind2tr, ind2city);
-                addstr("Чтобы продолжить нажмите Enter, для выхода 0\n\n");
-                char w;
-                w = getch();
+                addstr("\n\n");
 				begin_time = chrono::high_resolution_clock::now();
-                if (w=='0') break;
                 i++;
             }
 			end_time = chrono::high_resolution_clock::now();
 			elapsed_mcs += chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
             if (ifcity==false) addstr("Таких городов нет\n\n");
             else addstr("===============Конец==============\n\n");
-			log<<"calling algorithm 4"<<endl;
-			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
+			log<<"calling algorithm 4 ";
+			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs | ";
 			log<<"max rss = "<<get_rss()<<" KB"<<endl;
-			log<<"========================"<<endl;
 
         }
         else
@@ -845,19 +838,15 @@ int main(int argc, char** argv)
                 }
 				addstr("\n");
                 print_track(cruise, ind2tr, ind2city);
-                addstr("Чтобы продолжить нажмите Enter, для выхода 0\n\n");
-                char w;
-                w = getch();
+                addstr("\n\n");
 				begin_time = chrono::high_resolution_clock::now();
-                if (w=='0') break;
                 i++;
             }
 			if (ifcity==false) addstr("Таких городов нет\n\n");
             else addstr("===============Конец==============\n\n");
-			log<<"calling algorithm 5"<<endl;
-			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs"<<endl;
+			log<<"calling algorithm 5 ";
+			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs | ";
 			log<<"max rss = "<<get_rss()<<" KB"<<endl;
-			log<<"========================"<<endl;
         }
 		addstr("\n");
         addstr("Для продолжения нажмите любую клавишу\n");

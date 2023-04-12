@@ -1,4 +1,4 @@
-/main
-/log.txt
-/python/pylog.txt
-/python/__pycache__
+main
+log.txt
+python/pylog.txt
+__pycache__/*.pyc

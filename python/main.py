@@ -9,9 +9,10 @@ from classes import *
 def get_rss():
     return getrusage(RUSAGE_SELF).ru_maxrss
 
-log = open("pylog.txt", "w")
+logname = "pylog.txt"
+log = open(logname, "w")
 print("start prog max rss =",get_rss(),"KB", file=log)
-input_filename = "../"+sys.argv[1]
+input_filename = sys.argv[1]
 
 city2ind={}
 ind2city={}
@@ -78,6 +79,8 @@ with open(input_filename) as input_file:
             graph[id_from]={}
             graph[id_from][id_to]=[ed]
 print("after graph uploading max rss =" ,get_rss(),"KB", file=log)
+print("================", file=log)
+log.close()
 
 stdscr = curses.initscr()
 stdscr.scrollok(True)
@@ -205,7 +208,7 @@ while(1): #Основной цикл программы
             flag=True
         if flag: break
         stdscr.addstr("Такого города не найдено в базе данных. ")
-        stdscr.addstr("Введите другой город или 0 чтобы выйти из программы\n")
+        stdscr.addstr("Введите другой город\n")
     if mode==0: # 1 РЕЖИМ
         stdscr.addstr("Введите город прибытия\n")
         while(1):
@@ -217,11 +220,11 @@ while(1): #Основной цикл программы
                 flag = True
             if ((to_id == from_id) and (flag==True)):
                 stdscr.addstr("Город прибытия совпадает с городом отправления. ")
-                stdscr.addstr("Введите другой город или 0 чтобы выйти из программы\n")
+                stdscr.addstr("Введите другой город\n")
                 continue
             if (flag==True): break
             stdscr.addstr("Такого города не найдено в базе данных. ")
-            stdscr.addstr("Введите другой город или введите 0 чтобы выйти из программы\n")
+            stdscr.addstr("Введите другой город\n")
         begin_time = time_ns()
         res = algo1(graph, countid1, en_transp, from_id)
         cruise = track([])
@@ -234,10 +237,11 @@ while(1): #Основной цикл программы
         elapsed = end_time - begin_time
         stdscr.addstr("\n")
         print_track(stdscr, cruise, ind2tr, ind2city)
-        print("calling algorithm 1", file=log)
-        print("algo time elapsed", elapsed/1000,"mcs", file=log)
+        log = open(logname, 'a')
+        print("calling algorithm 1", file=log, end=" ")
+        print("algo time elapsed",elapsed/1000,"mcs", file=log, end=" | ")
         print("max rss =",get_rss(),"KB", file=log)
-        print("========================", file=log)
+        log.close()
     elif mode==1: # 2 РЕЖИМ
         stdscr.addstr("Введите город прибытия\n")
         while(1):
@@ -248,11 +252,11 @@ while(1): #Основной цикл программы
                 flag = True
             if ((to_id == from_id) and (flag==True)):
                 stdscr.addstr("Город прибытия совпадает с городом отправления. ")
-                stdscr.addstr("Введите другой город или 0 чтобы выйти из программы\n")
+                stdscr.addstr("Введите другой город\n")
                 continue
             if (flag==True): break
             stdscr.addstr("Такого города не найдено в базе данных. ")
-            stdscr.addstr("Введите другой город или введите 0 чтобы выйти из программы\n")
+            stdscr.addstr("Введите другой город\n")
         begin_time = time_ns()
         res = algo2(graph, countid1, en_transp, from_id)
         cruise = track([])
@@ -265,10 +269,11 @@ while(1): #Основной цикл программы
         elapsed = end_time - begin_time
         stdscr.addstr("\n")
         print_track(stdscr, cruise, ind2tr, ind2city)
-        print("calling algorithm 2", file=log)
-        print("algo time elapsed", elapsed/1000,"mcs", file=log)
+        log = open(logname, 'a')
+        print("calling algorithm 2", file=log, end=" ")
+        print("algo time elapsed",elapsed/1000,"mcs", file=log, end=" | ")
         print("max rss =",get_rss(),"KB", file=log)
-        print("========================", file=log)
+        log.close()
     elif mode==2: # 3 РЕЖИМ
         stdscr.addstr("Введите город прибытия\n")
         while(1):
@@ -279,11 +284,11 @@ while(1): #Основной цикл программы
                 flag = True
             if ((to_id == from_id) and (flag==True)):
                 stdscr.addstr("Город прибытия совпадает с городом отправления. ")
-                stdscr.addstr("Введите другой город или 0 чтобы выйти из программы\n")
+                stdscr.addstr("Введите другой город\n")
                 continue
             if (flag==True): break
             stdscr.addstr("Такого города не найдено в базе данных. ")
-            stdscr.addstr("Введите другой город или введите 0 чтобы выйти из программы\n")
+            stdscr.addstr("Введите другой город\n")
         begin_time = time_ns()
         res = algo3(graph, countid1, en_transp, from_id)
         cruise = track([])
@@ -296,10 +301,11 @@ while(1): #Основной цикл программы
         elapsed = end_time - begin_time
         stdscr.addstr("\n")
         print_track(stdscr, cruise, ind2tr, ind2city)
-        print("calling algorithm 3", file=log)
-        print("algo time elapsed", elapsed/1000,"mcs", file=log)
+        log = open(logname, 'a')
+        print("calling algorithm 3", file=log, end=" ")
+        print("algo time elapsed",elapsed/1000,"mcs", file=log, end=" | ")
         print("max rss =",get_rss(),"KB", file=log)
-        print("========================", file=log)
+        log.close()
     elif mode==3: # 4 РЕЖИМ
         ifcity=False
         stdscr.addstr("Введите максимальную стоимость поездки руб ")
@@ -329,21 +335,18 @@ while(1): #Основной цикл программы
             stdscr.attroff(curses.color_pair(3))
             stdscr.addstr('\n')
             print_track(stdscr, cruise, ind2tr, ind2city)
-            stdscr.addstr("\nЧтобы продолжить нажмите Enter, для выхода 0\n\n")
-            curses.noecho()
-            w = stdscr.getch()
-            curses.echo()
+            stdscr.addstr("\n\n")
             begin_time = time_ns()
-            if (w==ord("0")): break
             i+=1
         end_time = time_ns()
         elapsed+=end_time-begin_time
         if not ifcity: stdscr.addstr("Таких городов нет\n\n")
         else: stdscr.addstr("===============Конец==============\n\n")
-        print("calling algorithm 4", file=log)
-        print("algo time elapsed",elapsed/1000,"mcs", file=log)
+        log = open(logname, 'a')
+        print("calling algorithm 4", file=log, end=" ")
+        print("algo time elapsed",elapsed/1000,"mcs", file=log, end=" | ")
         print("max rss =",get_rss(),"KB", file=log)
-        print("========================", file=log)
+        log.close
     else: # 5 РЕЖИМ
         ifcity=False
         stdscr.addstr("Введите максимальное время поездки, мин ")
@@ -373,21 +376,18 @@ while(1): #Основной цикл программы
             stdscr.attroff(curses.color_pair(3))
             stdscr.addstr('\n')
             print_track(stdscr, cruise, ind2tr, ind2city)
-            stdscr.addstr("\nЧтобы продолжить нажмите Enter, для выхода 0\n\n")
-            curses.noecho()
-            w = stdscr.getch()
-            curses.echo()
+            stdscr.addstr("\n\n")
             begin_time = time_ns()
-            if (w==ord("0")): break
             i+=1
         end_time = time_ns()
         elapsed+=end_time-begin_time
         if not ifcity: stdscr.addstr("Таких городов нет\n\n")
         else: stdscr.addstr("===============Конец==============\n\n")
-        print("calling algorithm 5", file=log)
-        print("algo time elapsed",elapsed/1000,"mcs", file=log)
+        log = open(logname, 'a')
+        print("calling algorithm 5", file=log, end=" ")
+        print("algo time elapsed",elapsed/1000,"mcs", file=log, end=" | ")
         print("max rss =",get_rss(),"KB", file=log)
-        print("========================", file=log)
+        log.close()
     stdscr.addstr("\n")
     stdscr.addstr("Для продолжения нажмите любую клавишу\n")
     stdscr.getch()
