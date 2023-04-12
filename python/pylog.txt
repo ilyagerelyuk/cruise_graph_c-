@@ -1,4 +1,0 @@
-start prog max rss = 11960 KB
-after graph uploading max rss = 11960 KB
-calling algorithm 1 algo time elapsed 177.0 mcs | max rss = 12444 KB
-calling algorithm 2 algo time elapsed 207.6 mcs | max rss = 12444 KB

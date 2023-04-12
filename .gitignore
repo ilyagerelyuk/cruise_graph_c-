@@ -1,4 +1,4 @@
 main
 log.txt
 python/pylog.txt
-__pycache__/*.pyc
+python/__pycache__/*.pyc
