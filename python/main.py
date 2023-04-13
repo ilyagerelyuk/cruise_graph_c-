@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import curses
 import sys
 from time import time_ns
@@ -161,7 +163,10 @@ while(1): #Основной цикл программы
     if (tp==3): continue
     if (tp==0):
         curses.curs_set(1)
-        stdscr.addstr("Введите названия разрешенных видов транспорта со строчной буквы через Enter\n")
+        stdscr.addstr("Возможные виды транспорта:\n")
+        for i in range(countid2):
+            stdscr.addstr(ind2tr[i]+"\n")
+        stdscr.addstr("\nВведите названия разрешенных видов транспорта со строчной буквы через Enter\n")
         stdscr.addstr("По окончании нажмите дважды Enter\n")
         curses.echo()
         trtype = str(stdscr.getstr(), 'utf-8', errors='ignore')
@@ -176,7 +181,10 @@ while(1): #Основной цикл программы
         curses.curs_set(1)
         stdscr.keypad(True)
         zapr=set()
-        stdscr.addstr("Введите названия запрещенных видов транспорта со строчной буквы через Enter\n")
+        stdscr.addstr("Возможные виды транспорта:\n")
+        for i in range(countid2):
+            stdscr.addstr(ind2tr[i]+"\n")
+        stdscr.addstr("\nВведите названия запрещенных видов транспорта со строчной буквы через Enter\n")
         stdscr.addstr("По окончании нажмите дважды Enter\n")
         curses.echo()
         trtype = str(stdscr.getstr(), 'utf-8', errors='ignore')
@@ -341,7 +349,7 @@ while(1): #Основной цикл программы
         end_time = time_ns()
         elapsed+=end_time-begin_time
         if not ifcity: stdscr.addstr("Таких городов нет\n\n")
-        else: stdscr.addstr("===============Конец==============\n\n")
+        else: stdscr.addstr("\n")
         log = open(logname, 'a')
         print("calling algorithm 4", file=log, end=" ")
         print("algo time elapsed",elapsed/1000,"mcs", file=log, end=" | ")
@@ -382,7 +390,7 @@ while(1): #Основной цикл программы
         end_time = time_ns()
         elapsed+=end_time-begin_time
         if not ifcity: stdscr.addstr("Таких городов нет\n\n")
-        else: stdscr.addstr("===============Конец==============\n\n")
+        else: stdscr.addstr("\n")
         log = open(logname, 'a')
         print("calling algorithm 5", file=log, end=" ")
         print("algo time elapsed",elapsed/1000,"mcs", file=log, end=" | ")

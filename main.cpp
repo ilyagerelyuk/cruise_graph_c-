@@ -539,7 +539,12 @@ int main(int argc, char** argv)
 			clear();
 			curs_set(1);
 			keypad(stdscr, true);
-			addstr("Введите названия разрешенных видов транспорта со строчной буквы через Enter\n");
+			addstr("Возможные виды транспорта:\n");
+			for(map<unsigned long, string>::iterator it = ind2tr.begin(); it != ind2tr.end(); ++it) {
+				addstr(it->second.c_str());
+				addstr("\n");
+			}
+			addstr("\nВведите названия разрешенных видов транспорта со строчной буквы через Enter\n");
 			addstr("По окончании нажмите дважды Enter\n");
 			echo();
 			getnstr(trtypec, 50);
@@ -566,7 +571,12 @@ int main(int argc, char** argv)
 			curs_set(1);
 			keypad(stdscr, true);
 			set<unsigned long> zapr;
-			addstr("Введите названия запрещенных видов транспорта со строчной буквы через Enter\n");
+			addstr("Возможные виды транспорта:\n");
+			for(map<unsigned long, string>::iterator it = ind2tr.begin(); it != ind2tr.end(); ++it) {
+				addstr(it->second.c_str());
+				addstr("\n");
+			}
+			addstr("\nВведите названия запрещенных видов транспорта со строчной буквы через Enter\n");
 			addstr("По окончании нажмите дважды Enter\n");
 			echo();
 			getnstr(trtypec, 50);
@@ -794,7 +804,7 @@ int main(int argc, char** argv)
 			end_time = chrono::high_resolution_clock::now();
 			elapsed_mcs += chrono::duration_cast<chrono::microseconds>(end_time - begin_time);
             if (ifcity==false) addstr("Таких городов нет\n\n");
-            else addstr("===============Конец==============\n\n");
+            else addstr("\n");
 			log<<"calling algorithm 4 ";
 			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs | ";
 			log<<"max rss = "<<get_rss()<<" KB"<<endl;
@@ -843,7 +853,7 @@ int main(int argc, char** argv)
                 i++;
             }
 			if (ifcity==false) addstr("Таких городов нет\n\n");
-            else addstr("===============Конец==============\n\n");
+            else addstr("\n");
 			log<<"calling algorithm 5 ";
 			log<<"algo time elapsed "<<elapsed_mcs.count()<<" mcs | ";
 			log<<"max rss = "<<get_rss()<<" KB"<<endl;
